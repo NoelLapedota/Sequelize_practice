@@ -22,11 +22,11 @@ db.sequelize
     console.log("Failed to sync db: " + err.message);
   });
 
-const migration = async () => {
+const migration = async (db) => {
   try {
     const migrationFile = require("./models/migration/add-level-to-course");
 
-    await migrationFile.up(sequelize.getQueryInterface(), Sequelize);
+    await migrationFile.up(db.sequelize.getQueryInterface(), db.Sequelize);
 
     console.log("Migration completed successfully");
   } catch (error) {
@@ -34,8 +34,8 @@ const migration = async () => {
   }
 };
 
-//call migration
-migration();
+//call migration 
+migration(db);
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -43,7 +43,7 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route
+// simple route 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
