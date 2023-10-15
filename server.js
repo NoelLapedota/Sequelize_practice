@@ -12,7 +12,6 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-const new_students = require("./routing/new_students");
 const ranking = require('./routing/ranking')
 
 db.sequelize
@@ -47,7 +46,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //routes
-app.use("/api/v1", new_students);
 app.use("/api/v1", ranking);
 
 
