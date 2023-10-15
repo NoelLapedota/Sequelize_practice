@@ -27,7 +27,7 @@ db.sequelize
 
 const migration = async (db) => {
   try {
-    const migrationFile = require("./models/migration/add-level-to-course");
+    const migrationFile = require("./models/migrations/add-level-to-course");
 
     await migrationFile.up(db.sequelize.getQueryInterface(), db.Sequelize);
 
