@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+const db = require("./models/index");
 
 var corsOptions = {
   origin: "http://localhost:8081",
@@ -11,9 +12,11 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-const db = require("./models/index");
+const new_students = require("./routing/new_students");
+const ranking = require('./routing/ranking')
 
 db.sequelize
+  // Synchronize the model with the database
   .sync()
   .then(() => {
     console.log("Synced db.");
@@ -34,7 +37,7 @@ const migration = async (db) => {
   }
 };
 
-//call migration 
+//call migration
 migration(db);
 
 // parse requests of content-type - application/json
@@ -43,13 +46,34 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// simple route 
+//routes
+app.use("/api/v1", new_students);
+app.use("/api/v1", ranking);
+
+
+// simple route
 app.get("/", (req, res) => {
+  console.log("db is" + db);
+
   res.json({ message: "Welcome to bezkoder application." });
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
+module.exports = db;
